@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="UserMapper">
+
+	<select id="getUserInfo" resultType="com.example.boot.model.UserModel" parameterType="hashMap">
+		SELECT user_id
+				, cast(aes_decrypt(user_nm, #{aesKey}) as char) as user_nm
+				, cast(aes_decrypt(phone_num, #{aesKey}) as char) as phone_num
+				, cast(aes_decrypt(sender_nm, #{aesKey}) as char) as sender_nm
+				, cast(aes_decrypt(sender_phone_num, #{aesKey}) as char) as sender_phone_num
+				, cast(aes_decrypt(sender_addr, #{aesKey}) as char) as sender_addr
+				, sender_gate_num
+				, cast(aes_decrypt(receiver_nm, #{aesKey}) as char) as receiver_nm
+				, cast(aes_decrypt(receiver_phone_num, #{aesKey}) as char) as receiver_phone_num
+				, cast(aes_decrypt(receiver_addr, #{aesKey}) as char) as receiver_addr
+				, receiver_gate_num
+				, ad_agree
+				, create_dt
+				, update_dt
+				, login_dt
+				, delete_dt
+			FROM users
+		<where>
+			<if test="phone_num != null">
+				AND phone_num = aes_encrypt(#{phone_num}, #{aesKey})
+			</if>
+			<if test="user_id != null">
+				AND user_id = #{user_id}
+			</if>
+			AND delete_dt is null
+		</where>
+	</select>
+
+	<select id="getUserDetail" resultType="com.example.boot.model.UserDetailModel" parameterType="hashMap">
+		SELECT user_id
+			 , cast(aes_decrypt(user_nm, #{aesKey}) as char) as user_nm
+			 , cast(aes_decrypt(phone_num, #{aesKey}) as char) as phone_num
+			 , cast(aes_decrypt(sender_addr, #{aesKey}) as char) as sender_addr
+			 , cast(aes_decrypt(sender_nm, #{aesKey}) as char) as sender_nm
+			 , cast(aes_decrypt(sender_phone_num, #{aesKey}) as char) as sender_phone_num
+			 , sender_gate_num
+			 , ad_agree
+		FROM users
+		WHERE user_id = #{user_id}
+		AND delete_dt is null
+	</select>
+
+</mapper>

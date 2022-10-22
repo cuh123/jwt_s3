@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="FileMapper">
+
+	<select id="getFileDetail" resultType="com.example.boot.model.FileModel" parameterType="hashMap">
+		SELECT contact_id,
+	   		   contact_title,
+	   		   contact_txt,
+	   		   contact_type,
+	   		   contact_answer_status,
+	   		   contact_answer_txt,
+	   		   contact_pic_url_1,
+	   		   contact_pic_url_2,
+	   		   create_dt
+		FROM contact
+		WHERE contact_id = #{contact_id}
+		AND user_id = #{user_id}
+	</select>
+	
+	<insert id="fileUpload" parameterType="com.example.boot.model.FileModel">
+		INSERT INTO contact
+		(
+			user_id,
+			contact_title,
+			contact_txt,
+			contact_type,
+			contact_answer_status,
+			contact_pic_url_1,
+			contact_pic_url_2,
+			create_dt
+		)
+		VALUES
+		(
+			#{user_id},
+			#{contact_title},
+			#{contact_txt},
+			#{contact_type},
+			#{contact_answer_status},
+			#{contact_pic_url_1},
+			#{contact_pic_url_2},
+			NOW()
+		)
+	</insert>
+	
+	<delete id="fileRemove" parameterType="hashMap">
+		DELETE FROM contact
+		WHERE contact_id = #{contact_id}
+		AND user_id = #{user_id}
+	</delete>
+
+</mapper>
